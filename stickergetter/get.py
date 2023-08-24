@@ -8,6 +8,8 @@ def get(sticker_id, index):
     soup = BeautifulSoup(res.content, "html.parser")
     try:
         elem = soup.select(".FnImage span")[index]
-        return re.search(r'\((.+)\)', elem.get("style")).group(1)
+        img_url = re.search(r'\((.+)\)', elem.get("style")).group(1)
+        imgres = requests.get(img_url)
+        return imgres.content
     except Exception:
         return False

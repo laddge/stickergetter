@@ -1,4 +1,5 @@
 import os
+from io import BytesIO
 from dotenv import load_dotenv
 import discord
 from discord import Option
@@ -23,9 +24,11 @@ def main():
         sticker_id: Option(int, required=True),
         index: Option(int, required=True),
     ):
-        img_url = get(sticker_id, index)
-        if img_url:
-            await ctx.respond(img_url)
+        img = get(sticker_id, index)
+        if img:
+            buff = BytesIO(img)
+            buff.seek(0)
+            await ctx.respond(file=discord.File(fp=buff, filename="sticker.png"))
         else:
             await ctx.respond("Failed!")
 
